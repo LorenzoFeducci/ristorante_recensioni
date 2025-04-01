@@ -1,6 +1,5 @@
 <?php
     session_start();
-    session_unset();
     include('connessione.php');
 ?>
 
@@ -13,14 +12,16 @@
 </head>
 <body>
     <?php
-        $_SESSION["errore"] = " ";
+        $_SESSION["errore"] = "";
         $username = $_POST["username"];
         $password = $_POST["password"];
 
         if (empty($_POST["username"]) || empty($_POST["password"])) {
             $_SESSION["errore"] = "Compila tutti i campi";
             header("Location: errore_loginreg.php");
+            exit;
         }
+        
         
         $sql = "SELECT username, password FROM utente WHERE username = '$username'";
         $result = $conn->query($sql);
@@ -38,7 +39,7 @@
             $_SESSION["errore"] = "username inesistente";
             header("Location: errore_loginreg.php");
         }
-
+        
     ?>
 </body>
 </html>
