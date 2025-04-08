@@ -15,29 +15,29 @@
         $_SESSION["errore"] = "";
         $username = $_POST["username"];
         $password = $_POST["password"];
+        $passwordHash = hash("sha256", $password);
 
         if (empty($_POST["username"]) || empty($_POST["password"])) {
             $_SESSION["errore"] = "Compila tutti i campi";
-            header("Location: errore_loginreg.php");
+            header("Location: paginalogin.php");
             exit;
         }
-        
         
         $sql = "SELECT username, password FROM utente WHERE username = '$username'";
         $result = $conn->query($sql);
 
         if($result->num_rows > 0){
             $row = $result->fetch_assoc();
-            if($row["password"] == $password){
+            if($row["password"] == $passwordHash){
                 $_SESSION["username"] = $username;
                 header("Location: benvenuto.php");
             }else{
                 $_SESSION["errore"] = "password errata";
-                header("Location: errore_loginreg.php");
+                header("Location: paginalogin.php");
             }
         }else{
             $_SESSION["errore"] = "username inesistente";
-            header("Location: errore_loginreg.php");
+            header("Location: paginalogin.php");
         }
         
     ?>

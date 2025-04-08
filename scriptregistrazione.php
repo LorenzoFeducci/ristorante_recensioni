@@ -22,7 +22,7 @@
 
         if (empty($_POST["username"]) || empty($_POST["password"]) || empty($_POST["nome"]) || empty($_POST["cognome"])  || empty($_POST["email"])) {
             $_SESSION["errore"] = "Compila tutti i campi";
-            header("Location: errore_loginreg.php");
+            header("Location: paginaregistrazione.php");
             exit;
         }
         
@@ -31,15 +31,17 @@
 
         if($result->num_rows > 0){
             $_SESSION["errore"] = "username già esistente";
-            header("Location: errore_loginreg.php");
+            header("Location: paginaregistrazione.php");
         }else{
             $sql2 = "SELECT username, email FROM utente WHERE email = '$email'";
             $result2 = $conn->query($sql2);
 
             if($result2->num_rows > 0){
                 $_SESSION["errore"] = "email già esistente";
-                header("Location: errore_loginreg.php");
+                header("Location: paginaregistrazione.php");
             }else{
+                $sql3 = "INSERT INTO utente (username, password, nome, cognome, email) VALUES('$username', '$passwordHash', '$nome', '$cognome', '$email')";
+                $conn->query($sql3);
                 $_SESSION["username"] = $username;
                 header("Location: benvenuto.php");
             }
